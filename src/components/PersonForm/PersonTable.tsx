@@ -4,16 +4,17 @@ import { Table, Button, Space, Checkbox } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { useSelector, useDispatch } from "react-redux"
 import { RootState } from "@/store/store"
-import { deletePerson, deleteMultiple } from "@/store/personSlice"
+import {
+  deletePerson,
+  deleteMultiple,
+  setEditingPerson,
+  clearEditingPerson,
+} from "@/store/personSlice"
 import { useEffect, useState } from "react"
 import { Person } from "@/types/person"
 import { useTranslation } from "react-i18next"
 
-interface Props {
-  setEditingPerson: (person: Person) => void;
-}
-
-export default function PersonTable({ setEditingPerson } : Props) {
+export default function PersonTable() {
   const { t } = useTranslation();
   const persons = useSelector((state: RootState) => state.persons.list)
   const dispatch = useDispatch()
@@ -56,14 +57,17 @@ export default function PersonTable({ setEditingPerson } : Props) {
           <Button 
             type="link"
             style={{color: "rgba(0, 0, 0, 0.88)"}}
-            onClick={() => setEditingPerson(record)}
+            onClick={() => dispatch(setEditingPerson(record))}
           >
             {t("table.edit")}
           </Button>
           <Button
             type="link"
             style={{color: "rgba(0, 0, 0, 0.88)"}}
-            onClick={() => dispatch(deletePerson(record.id))}
+            onClick={() => {
+              dispatch(deletePerson(record.id));
+              dispatch(clearEditingPerson());
+            }}
           >
             {t("table.delete")}
           </Button>
@@ -98,7 +102,11 @@ export default function PersonTable({ setEditingPerson } : Props) {
       
         <Button
           disabled={!selectedKeys.length}
-          onClick={() => dispatch(deleteMultiple(selectedKeys as string[]))}
+          onClick={() => {
+            dispatch(deleteMultiple(selectedKeys as string[]));
+            dispatch(clearEditingPerson());
+            setSelectedKeys([]);
+          }}
         >
           {t("table.delete")}
         </Button>

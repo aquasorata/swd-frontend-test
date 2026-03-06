@@ -11,25 +11,24 @@ import {
   DatePicker,
   Image,
 } from "antd";
-import { useDispatch } from "react-redux";
-import { addPerson, editPerson } from "@/store/personSlice";
-import { FormValues, Person } from "../../types/person";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addPerson,
+  editPerson,
+  clearEditingPerson,
+} from "@/store/personSlice";
+import { FormValues } from "../../types/person";
 import { v4 as uuid } from "uuid";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 
-interface PersonFormProps {
-  editingPerson: Person | null;
-  setEditingPerson: React.Dispatch<React.SetStateAction<Person | null>>;
-}
 
-export default function PersonForm({
-  editingPerson,
-  setEditingPerson,
-}: PersonFormProps) {
+export default function PersonForm() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const editingPerson = useSelector((state: RootState) => state.persons.editingPerson);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -38,7 +37,10 @@ export default function PersonForm({
         ...editingPerson,
         birthday: dayjs(editingPerson.birthday),
       });
+      return;
     }
+
+    form.resetFields();
   }, [editingPerson, form]);
 
   const onFinish = (values: Omit<FormValues, "id">) => {
@@ -55,7 +57,7 @@ export default function PersonForm({
           id: editingPerson.id,
         })
       );
-      setEditingPerson(null);
+      dispatch(clearEditingPerson());
     } else {
       dispatch(
         addPerson({

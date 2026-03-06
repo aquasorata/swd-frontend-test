@@ -13,10 +13,12 @@ const saveData = (data: Person[]) => {
 
 interface PersonState {
   list: Person[]
+  editingPerson: Person | null
 }
 
 const initialState: PersonState = {
-  list: loadData()
+  list: loadData(),
+  editingPerson: null,
 }
 
 const personSlice = createSlice({
@@ -44,6 +46,14 @@ const personSlice = createSlice({
       alert("Edit success");
     },
 
+    setEditingPerson(state, action: PayloadAction<Person>) {
+      state.editingPerson = action.payload
+    },
+
+    clearEditingPerson(state) {
+      state.editingPerson = null
+    },
+
     deleteMultiple(state, action: PayloadAction<string[]>) {
       state.list = state.list.filter(p => !action.payload.includes(p.id))
       saveData(state.list)
@@ -52,7 +62,14 @@ const personSlice = createSlice({
   }
 })
 
-export const { addPerson, deletePerson, editPerson, deleteMultiple } =
+export const {
+  addPerson,
+  deletePerson,
+  editPerson,
+  deleteMultiple,
+  setEditingPerson,
+  clearEditingPerson,
+} =
   personSlice.actions
 
 export default personSlice.reducer
