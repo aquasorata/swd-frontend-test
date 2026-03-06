@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
+import { ConfigProvider } from "antd";
 import localFont from "next/font/local";
+import Header from "@/components/Header";
+
 import "./globals.css";
+import "../style/layout.scss";
+import "../style/shapes.scss";
+import ReduxProvider from "@/providers/ReduxProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -20,13 +27,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <main className="container">
+          <ConfigProvider wave={{ disabled: true }}>
+            <Header />
+            <ReduxProvider>
+              {children}
+            </ReduxProvider>
+          </ConfigProvider>
+        </main>
       </body>
     </html>
   );
