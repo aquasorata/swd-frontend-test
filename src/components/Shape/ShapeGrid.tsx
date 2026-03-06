@@ -76,7 +76,7 @@ export default function ShapeGrid() {
         <Col>
           <Button className="shape-btn" onClick={moveRight}>
             <div className="triangle-right"></div>
-            <span>{t("shape.oveShape")}</span>
+            <span>{t("shape.moveShape")}</span>
           </Button>
         </Col>
       </Row>
