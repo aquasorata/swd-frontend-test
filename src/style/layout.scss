@@ -45,7 +45,7 @@
 .test-topic {
   width: 100%;
   padding: 16px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid gray;
 }
 
 .test-detail{
@@ -70,7 +70,7 @@
   }
 
   &:active {
-    background-color: #6edc8b !important;
+    background-color: #6eda78 !important;
   }
 
   span {
@@ -78,7 +78,7 @@
     border-radius: 12px;
     color: white;
     font-size: 12px;
-    background: #6edc8b;
+    background: #6eda78;
     position: absolute;
     bottom: -8px;
     left: 50%;
